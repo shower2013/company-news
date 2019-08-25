@@ -1,0 +1,57 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.7.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'java'
+    id 'war'
+}
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+            srcDir 'src/main/java'
+        }
+    }
+}
+
+
+group = 'com.homework'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+task zipStatic(type: Zip) {
+    from 'src/main/resources/static'
+    version = ''
+}
+
+task warNoStatic(type: War) {
+    version = ''
+    exclude '**/static/**'
+    manifest {
+        attributes('Manifest-Version': '1.0')
+    }
+}
+
+task warCopy(type: Copy) {
+    from 'build/libs'
+    into 'build/distributions'
+    include '**/*.war'
+}
+
+task artifactsCopy(type: Copy) {
+    from 'build/distributions'
+    into 'build-artifacts'
+}
+

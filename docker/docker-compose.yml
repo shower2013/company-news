@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  app:
+    build: tomcat/
+    ports:
+      - 8080
+    networks:
+      - net
+    hostname: app
+    container_name: app
+
+  proxy:
+    build: nginx/
+    ports:
+      - 80:80
+    networks:
+      - net
+    depends_on:
+      - app
+    hostname: proxy
+    container_name: proxy
+networks:
+  net:
+    driver: bridge
+
+
